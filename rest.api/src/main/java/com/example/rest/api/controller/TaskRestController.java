@@ -1,5 +1,6 @@
 package com.example.rest.api.controller;
 
+import com.example.rest.api.dto.TaskDTO;
 import com.example.rest.api.model.Tag;
 import com.example.rest.api.model.Task;
 import com.example.rest.api.service.TaskService;
@@ -9,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @RestController
 @RequestMapping("/tasks")
@@ -53,8 +57,11 @@ public class TaskRestController {
 
     // Abrufen aller Aufgaben
     @GetMapping
-    public ResponseEntity<List<Task>> getTasks() {
-        List<Task> tasks = taskService.getAllTasks();
+    public ResponseEntity<List<TaskDTO>> getTasks() {
+        List<TaskDTO> tasks = taskService.getAllTasks()
+                .stream()
+                .map(TaskDTO::new)
+                .collect(Collectors.toList());
         if (tasks.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

@@ -4,6 +4,7 @@ import com.example.rest.api.model.Task;
 import com.example.rest.api.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +25,12 @@ public class TaskService {
     }
 
     // Alle Aufgaben abrufen
+    @Transactional
     public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+        List<Task> tasks=taskRepository.findAll();
+        // Initialize the tags collection to avoid LazyInitializationException
+        tasks.forEach(task -> task.getTags().size());
+        return tasks;
     }
 
     // Eine Aufgabe anhand ihrer ID finden
