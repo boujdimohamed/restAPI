@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.stream;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping(path = "api/v1/task")
 public class TaskRestController {
 
     private final TaskService taskService;
@@ -38,14 +38,14 @@ public class TaskRestController {
     }
 
     // Hinzufügen einer neuen Aufgabe
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<String> addTask(@RequestBody Task task) {
         taskService.addTask(task);
         return ResponseEntity.status(HttpStatus.CREATED).body("Aufgabe erfolgreich hinzugefügt.");
     }
 
     // Löschen einer Aufgabe
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteTask(@PathVariable Long id) {
         boolean deleted = taskService.deleteTaskById(id);
         if (deleted) {
@@ -56,12 +56,12 @@ public class TaskRestController {
     }
 
     // Abrufen aller Aufgaben
-    @GetMapping
-    public ResponseEntity<List<TaskDTO>> getTasks() {
-        List<TaskDTO> tasks = taskService.getAllTasks()
-                .stream()
+    @GetMapping("/all")
+    public ResponseEntity<List<Task>> getTasks() {
+        List<Task> tasks = taskService.getAllTasks();
+                /*.stream()
                 .map(TaskDTO::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
         if (tasks.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
