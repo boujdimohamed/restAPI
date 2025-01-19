@@ -16,6 +16,7 @@ import static java.util.Arrays.stream;
 
 @RestController
 @RequestMapping(path = "api/v1/task")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TaskRestController {
 
     private final TaskService taskService;
